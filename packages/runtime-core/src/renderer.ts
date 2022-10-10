@@ -135,7 +135,7 @@ export function createRenderer(renderOptions){
         // 循环老的元素，看下新的里面有没有，如果有说明要比较差异，没有要添加到列表中，老的有新的没有要删除。
         const toBePatched = e2 - s2 + 1;//新的总个数
         const newIndexToOldIndexMap = new Array(toBePatched).fill(0);//一个记录是否比对过得映射表。
-        for(let i = s1;i<=e1,i++){
+        for(let i = s1;i<=e1;i++){
             const oldChild = c1[i];//老的孩子
             let newIndex = keyToNewIndexMap.get(oldChild.key);//用老的孩子去新的里面找。
             if(newIndex == undefined){
@@ -163,7 +163,7 @@ export function createRenderer(renderOptions){
 
 
     }
-    cosnt patchChildren = (n1,n2,el) => {
+    const patchChildren = (n1,n2,el) => {
         //比较两个虚拟节点的儿子的差异，el就是当前的父节点。
         const c1 = n1 && n1.children;
         const c2 = n2 && n2.children;

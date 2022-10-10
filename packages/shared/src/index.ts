@@ -5,7 +5,7 @@ export const isFunction = (value: any) => typeof value==='function';
 export const isArray = Array.isArray;
 export const assign = Object.assign;
 
-export function ShapeFlags = {//vue3提供的形状标识
+export const enum ShapeFlags {//vue3提供的形状标识
     ELEMENT = 1,
     FUNCTION_COMPONENT = 1 << 1,
     STATEFUL_COMPONENT = 1 << 2,
