@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="./reactivity.global.js"></script> -->
+    <script src="../../../node_modules/.pnpm/@vue+reactivity@3.2.36/node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        // 一
+        // const {reactive,effect} = VueReactivity;
+        // const state = reactive({name:'zf',age:12});
+        // effect(()=>{
+        //     stage.age = Math.random();
+        //     document.getElementById('app').innerHTML = state.name + '今年' + state.age + '岁'
+        // })
+        // setTimeout(()=>{
+        //     state.age++
+        // },1000)
+        
+        // 二
+        // const {reactive,effect} = VueReactivity;
+        // const state = reactive({flag:true,name:'ts',age:12});
+        // effect(()=>{
+        //     //期望的是每次执行effect的时候都可以清理一遍依赖，重新收集。
+        //     console.log('render');
+        //     document.body.innerHTML = state.flag ? state.name : state.age;
+        // })
+        // setTimeout(()=>{
+        //     state.flag = false;
+        //     setTimeout(()=>{
+        //         console.log('修改name原则上不更新');
+        //         state.name = 'zf'
+        //     },1000)
+        // },1000)
+
+        // 三
+        // const {reactive,effect} = VueReactivity;
+        // const state = reactive({flag:true,name:'ts',age:12});
+        // let runner = effect(()=>{
+        //     document.body.innerHTML = state.age;
+        // })
+        // runner.effect.stop();
+        // setTimeout(()=>{
+        //     state.age = 20;
+        //     setTimeout(()=>{
+        //         runner();
+        //     },2000)
+        // },1000)
+
+        // 四
+        // let waiting = false;
+        // const {reactive,effect} = VueReactivity;
+        // const state = reactive({flag:true,name:'ts',age:12});
+        // let runner = effect(()=>{
+        //     document.body.innerHTML = state.age;
+        // },{
+        //     scheduler(){
+        //         console.log('run');
+        //         if(!waiting){
+        //             waiting = true;
+        //             setTimeout(()=>{
+        //                runner();
+        //                waiting = false;
+        //             },1000)
+        //         }
+        //     }
+        // })
+        // state.age = 1;
+        // state.age = 2;
+        // state.age = 3;
+
+        // 五.1
+        /*
+            计算属性中肯定要有一个缓存的标识，如果这个依赖有变化，要重新执行get，没有变化就不重新执行get
+            dirty是否是脏的
+            计算属性是一个effect，依赖的属性变化了，会更新dirty的值
+        */
+        const {reactive,effect,computed} = VueReactivity;
+        const state = reactive({firstname:'胡',lastname:'富强'});
+        // const fullName = computed({
+        //     get(){//defineProperty中的getter
+        //         console.log(computed,'runner');
+        //         return state.firstname + state.lastname;
+        //     },
+        //     set(newValue){//defineProperty中的setter
+        //         console.log(newValue);
+        //     }
+        // })
+        // fullName.value
+        // fullName.value //计算属性的缓存问题
+        // fullName.value = 100
+        // fullName.value = 200
+        // 五.2
+        // effect嵌套comoutedEffect
+        const fullName = computed(()=>{
+            return state.firstname + state.lastname;
+        })
+        console.log(fullName);
+        console.log(fullName.value);
+        effect(()=>{
+            app.innerHTML = fullName.value
+        })
+        setTimeout(() => {
+            state.firstname = 'hu'
+        }, 1000);
+    </script>
+</body>
+</html>

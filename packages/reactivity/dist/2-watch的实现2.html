@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- <script src="./reactivity.global.js"></script> -->
+     <script src="../../../node_modules/vue/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        const {watch,reactive} = Vue;
+        const state = reactive({flag:true,name:'胡',age:11});
+        function getData(timer){
+           return new Promise(resolve=>{
+            setTimeout(()=>{
+                resolve(timer)
+            },timer)
+           })
+        }
+        /*
+        */
+        let i = 2000;
+        watch(()=>state.age,async (newValue,oldValue,onCleanup)=>{
+            onCleanup(()=>{
+                clear = true;
+            })
+            let clear = false;
+            i-=1000;
+            let r = await getData(i);
+            if(!clear){document.body.innerHTML = r};//渲染最后一次----0
+            
+        },{flush:'sync'})
+        state.age = 12;
+        /*
+        第二次调用的时候将第一次的clear改为true(使用的为闭包)，则第一次的不执行；
+        第二次则正常执行。
+        */
+        state.age = 13;
+
+        // setTimeout(()=>{
+        //     state.age = 13
+        // },3000)
+    </script>
+</body>
+</html>

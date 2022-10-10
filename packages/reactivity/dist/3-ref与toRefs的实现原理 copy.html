@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- <script src="./reactivity.global.js"></script> -->
+     <script src="../../../node_modules/vue/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        // 一、ref的实现原理
+        // const {effect,ref} = Vue;
+        // const flag = ref(false);
+        // console.log(flag);
+        // effect(()=>{
+        //     app.innerHTML = flag.value ? '你好':'不好'
+        // })
+        // setTimeout(()=>{
+        //     flag.value = !flag.value;
+        // },1000)
+       
+        // 二、toRefs与toRef的实现
+        const {effect,ref,reactive,toRefs,toRef} = Vue;
+        const school = reactive({name:'tset',age:12})
+        let {name,age} = toRefs(school);
+        effect(()=>{
+            app.innerHTML = `我叫${name.value},今年${age.value}岁了`
+        })
+        setTimeout(()=>{
+            age.value = 20
+        },1000)
+    </script>
+</body>
+</html>
